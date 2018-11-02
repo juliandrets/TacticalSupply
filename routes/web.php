@@ -30,6 +30,12 @@ Route::get('adm', 'AdminPanelController@index')->middleware('auth', 'role:admin'
 	Route::get('category/{name}', 'CategoryController@show');	
 	Route::post('category/{name}/filter/price', 'CategoryController@showWithFilterPrice');	
 
+	// SubCaterogies
+	Route::resource('adm/subcategories', 'SubcategoryController');
+	Route::get('adm/subcategories/{id}/delete', 'SubcategoryController@destroy')->middleware('auth', 'role:admin');
+	Route::get('adm/subcategories/{id}/edit', 'SubcategoryController@edit')->middleware('auth', 'role:admin');
+	Route::post('adm/subcategories/{id}/update', 'SubcategoryController@update')->middleware('auth', 'role:admin');
+
 	// marcas
 	Route::resource('adm/brands', 'BrandController');
 	Route::get('adm/brands/{id}/delete', 'BrandController@destroy')->middleware('auth', 'role:admin');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Product;
+use App\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -17,7 +18,11 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('admin-panel-categories', ['categories' => $categories]);
+        $subCategories = Subcategory::all();
+        return view('admin-panel-categories', [
+            'categories' => $categories,
+            'subCategories' => $subCategories
+        ]);
     }
 
     /**
@@ -54,7 +59,7 @@ class CategoryController extends Controller
         $category->save();
 
 
-        return redirect('adm/categories');
+        return redirect('adm/categories?event=create');
     }
 
     /**
@@ -144,7 +149,7 @@ class CategoryController extends Controller
             'name' => $request->input('name')
         ]);
         
-        return redirect('adm/categories');
+        return redirect('adm/categories?event=edit');
     }
 
     /**
@@ -158,7 +163,7 @@ class CategoryController extends Controller
         $category = Category::find($id);
         $category->delete();
 
-        return redirect('adm/categories');
+        return redirect('adm/categories?event=delete');
 
     }
 }

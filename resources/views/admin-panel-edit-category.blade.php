@@ -7,33 +7,101 @@
 @section('content')
 
     <!-- Header -->
-    @include('layout.admin.header-admin')
     @include('layout.admin.aside')
 
-    <section id="admin-panel-body">
-        <h1>Crear Categoria</h1>
-        
+    <div id="right-panel" class="right-panel">
 
-        <form action="/adm/categories/{{$category->id}}/update" method="POST"  enctype="multipart/form-data">
-            {{ csrf_field() }}
-            <label>
-                <span>Imagen del producto</span>
-                <figure>
-                    <img src="/uploads/categories/{{ $category['picture'] }}" alt="">
-                </figure>
-                <input type="file" name="picture" value="{{$category->picture}}">
-            </label>
-            <label>
-                <span>Nombre de la categoria *</span>
-                <input type="text" name="name" placeholder="Nombre de la categoria *" required value="{{$category->name}}">
-            </label>
+        @include('layout.admin.header-admin')
 
-            <button type="submit" class="btn1">Editar Categoria</button>
-        </form>
-    
-    </section>
+        <div class="breadcrumbs">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Categorias</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li class="active"><a href="/adm/categories">Categorias</a></li>
+                            <li class="active"><a href="">Editar Categoria</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="clear"></div>
-    
+        <div class="content mt-3">
+            <div class="animated fadeIn">
+                <div class="row">
+
+                    <div class="col-md-12" style="padding-bottom: 20px">
+                        <a href="/adm/categories/"><button type="button" class="btn btn-primary"><i class="fa fa-angle-left"></i>&nbsp; Volver</button></a>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong class="card-title">Categorias</strong>
+                            </div>
+                            <div class="card-body">
+                                <form action="/adm/categories/{{$category->id}}/update" method="POST"  enctype="multipart/form-data">
+                                    {{ csrf_field() }}
+                                    <div class="card-body card-block">
+                                        <div class="form-group">
+                                            <label class=" form-control-label">Imagen</label>
+
+                                            <figure class="img-producto-form">
+                                                <img src="/uploads/categories/{{ $category['picture'] }}" alt="">
+                                            </figure>
+
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-image"></i></div>
+                                                <input class="form-control" type="file" name="picture" accept="image/*" style="font-size: 12px">
+                                            </div>
+                                            <small class="form-text text-muted">Preferentemente formato JPG</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class=" form-control-label">Nombre</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
+                                                <input class="form-control" value="{{$category->name}}" type="text" name="name" placeholder="Nombre de la categoria *" required>
+                                            </div>
+                                            <small class="form-text text-muted">Ejemplo: Pantalones Cargo Emerson</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp; Guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div><!-- .animated -->
+        </div><!-- .content -->
+    </div>
+
+    <!-- Right Panel -->
+
+    <script src="{{ asset('admin/js/vendor/jquery-2.1.4.min.js') }}"></script>
+    <script src="{{ asset('admin/js/popper.min.js') }}"></script>
+    <script src="{{ asset('admin/js/plugins.js') }}"></script>
+    <script src="{{ asset('admin/js/main.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#bootstrap-data-table-export').DataTable();
+        } );
+    </script>
+
+    @include('layout/admin/validaciones')
+
 
 @endsection
