@@ -75,6 +75,9 @@ Route::get('adm', 'AdminPanelController@index')->middleware('auth', 'role:admin'
 	// oferts
 	Route::get('/oferts', 'ProductController@showOferts');
 
+	// Ajax
+    Route::post('/adm/product/updateSubCategorySelect/{id}', 'AjaxController@updateSubCategorySelect');
+
 
 
 

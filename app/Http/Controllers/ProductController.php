@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\Category;
 use App\Brand;
+use App\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -19,7 +20,9 @@ class ProductController extends Controller
 
     public function index()
     {
-        
+        $products = Product::orderBy('id', 'desc')->paginate(10);
+
+        return view('admin-panel-products', ['products' => $products]);
     }
 
     public function showOferts() {
@@ -42,9 +45,15 @@ class ProductController extends Controller
     {
         $this->middleware('role:admin');
 
-        $categories = Category::all();
-        $brands = Brand::all()->sortBy("name");;
-        return view('admin-panel-create-product', ['categories' => $categories, 'brands' => $brands]);
+        $categories = Category::all()->sortBy("name");
+        $brands = Brand::all()->sortBy("name");
+        $subcategories = Subcategory::all();
+
+        return view('admin-panel-create-product', [
+            'categories'     => $categories,
+            'brands'         => $brands,
+            'subcategories'  => $subcategories
+        ]);
     }
 
     /**
@@ -55,7 +64,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
         if ($request->hasFile('picture')) {
             $image = $request->file('picture');
             $name = time().'.'.$image->getClientOriginalExtension();
@@ -65,8 +73,19 @@ class ProductController extends Controller
             $name = 'sinfoto.jpg';
         }
 
+        // si ofert no esta activado no seteamos el ofert_date
+        if (!$request->input('ofert')) {
+            $ofert_date = null;
+        } else if ($request->input('ofert')) {
+            if ($request->input('ofert') == "on") {
+                $ofert = 1;
+            } else {
+                $ofert = 0;
+            }
+        }
+
         // si la fecha es nula le asignamos nulo
-        if($request->input('ofert_date')) {
+        if ($request->input('ofert_date')) {
             $ofert_date = $request->input('ofert_date');
         } else {
             $ofert_date = null;  
@@ -77,16 +96,17 @@ class ProductController extends Controller
             'price' => $request->input('price'),
             'stock' => $request->input('stock'),
             'category' => $request->input('category'),
+            'subcategory' => $request->input('subcategory'),
             'brand' => $request->input('brand'),
             'description' => $request->input('description'),
-            'ofert' => $request->input('ofert'),
+            'ofert' => $ofert,
             'ofert_date' => $ofert_date,
             'picture' => $name
         ]);
 
         $product->save();
 
-        return redirect('adm');
+        return redirect('adm/products');
     }
 
     /**

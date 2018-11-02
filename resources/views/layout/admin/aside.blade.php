@@ -16,8 +16,8 @@
 				<li class="menu-item-has-children dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Productos</a>
 					<ul class="sub-menu children dropdown-menu">
-						<li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Ver Productos</a></li>
-						<li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Nuevo Producto</a></li>
+						<li><i class="fa fa-puzzle-piece"></i><a href="/adm/products">Ver Productos</a></li>
+						<li><i class="fa fa-id-badge"></i><a href="/adm/products/create">Nuevo Producto</a></li>
 					</ul>
 				</li>
 				<li class="menu-item-has-children dropdown">
@@ -25,7 +25,7 @@
 					<ul class="sub-menu children dropdown-menu">
 						<li><i class="fa fa-table"></i><a href="/adm/categories">Ver Categorias</a></li>
 						<li><i class="fa fa-table"></i><a href="/adm/categories/create">Nueva Categoria</a></li>
-						<li><i class="fa fa-table"></i><a href="tables-data.html">Nueva SubCategoria</a></li>
+						<li><i class="fa fa-table"></i><a href="/adm/subcategories/create">Nueva SubCategoria</a></li>
 					</ul>
 				</li>
 				<li class="menu-item-has-children dropdown">

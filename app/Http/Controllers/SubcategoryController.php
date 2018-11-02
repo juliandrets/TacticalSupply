@@ -101,10 +101,10 @@ class SubcategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::find($id);
+        $category = Subcategory::find($id);
         $category->delete();
 
-        return redirect('adm/categories?event=delete');
+        return redirect('adm/categories?event=delete-sub');
 
     }
 }
