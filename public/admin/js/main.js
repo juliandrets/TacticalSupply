@@ -36,3 +36,12 @@ jQuery(document).ready(function($) {
 
 
 });
+
+// Tooltips
+(function($) {
+    $(document).ready(function() {
+        $("[data-tooltip='tooltip']").tooltip();
+    });
+})(jQuery)
+
+

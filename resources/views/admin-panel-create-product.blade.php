@@ -17,7 +17,7 @@
             <div class="col-sm-4">
                 <div class="page-header float-left">
                     <div class="page-title">
-                        <h1>Nueva Categoria</h1>
+                        <h1>Nuevo Producto</h1>
                     </div>
                 </div>
             </div>
@@ -25,8 +25,8 @@
                 <div class="page-header float-right">
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
-                            <li class="active"><a href="/adm/categories">Categorias</a></li>
-                            <li class="active"><a href="/adm/categories/create">Nueva Categoria</a></li>
+                            <li class="active"><a href="/adm/products">Productos</a></li>
+                            <li class="active"><a href="/adm/products/create">Nuevo Producto</a></li>
                         </ol>
                     </div>
                 </div>
@@ -38,13 +38,13 @@
                 <div class="row">
 
                     <div class="col-md-12" style="padding-bottom: 20px">
-                        <a href="/adm/categories/"><button type="button" class="btn btn-primary"><i class="fa fa-angle-left"></i>&nbsp; Volver</button></a>
+                        <a href="/adm/products/"><button type="button" class="btn btn-primary"><i class="fa fa-angle-left"></i>&nbsp; Volver</button></a>
                     </div>
 
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">Nueva Categoria</strong>
+                                <strong class="card-title">Nuevo Producto</strong>
                             </div>
                             <form action="/adm/products" method="POST"  enctype="multipart/form-data">
                                 {{ csrf_field() }}

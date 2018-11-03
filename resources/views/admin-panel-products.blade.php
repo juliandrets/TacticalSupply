@@ -25,7 +25,7 @@
                 <div class="page-header float-right">
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
-                            <li class="active"><a href="/adm/categories">Categorias</a></li>
+                            <li class="active"><a href="/adm/productos">Productos</a></li>
                         </ol>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                                 <span class="badge badge-pill badge-success"><i class="fa fa-check"></i></span>
                                 @if($event == 'create')
                                     El producto fue creado exitosamente.
-                                @elseif($event == 'edit')
+                                @elseif($event == 'update')
                                     El producto fue editado exitosamente.
                                 @elseif($event == 'delete')
                                     El producto fue borrado exitosamente.
@@ -64,6 +64,19 @@
                                 <strong class="card-title">Productos</strong>
                             </div>
                             <div class="card-body">
+                                <div class="row">
+                                        <div class="form-group col-4">
+                                            <label class="form-control-label">Nombre</label>
+                                            <form action="/adm/products/filters/name" method="GET" enctype="multipart/form-data">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
+                                                    <input class="form-control" type="text" name="name" value="@if(app('request')->input('name')) {{ app('request')->input('name') }} @endif">
+                                                    <button type="submi" class="btn btn-primary"><i class="fa fa-filter"></i>&nbsp; Filtrar</button>
+                                                </div>
+                                            </form>
+                                            <small class="form-text text-muted">Nombre del producto</small>
+                                        </div>
+                                </div>
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -72,6 +85,7 @@
                                         <th>Price</th>
                                         <th>Category</th>
                                         <th>SubCategory</th>
+                                        <th>Oferta</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -83,6 +97,7 @@
                                             <td>${{ $product->price }}</td>
                                             <td>{{ $product->category->name }}</td>
                                             <td>{{ $product->subcategory->name }}</td>
+                                            <td>@if($product->ofert) <span class="inOfert" data-tooltip="tooltip" data-placement="bottom" title="Hasta: {{ $product->ofert_date }}"><i class="fa fa-check" aria-hidden="true"></i> EN OFERTA</span> @else - @endif</td>
                                             <td>
                                                 <a href="/adm/products/{{ $product->id }}/edit"><i class="fa fa-pencil edit" aria-hidden="true"></i></a>
                                                 <a href="/adm/products/{{ $product->id }}/delete" onclick="return deleteConfirm()"><i class="fa fa-close delete" aria-hidden="true"></i></a>

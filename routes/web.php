@@ -9,6 +9,7 @@ Route::get('faqs', 'HomeController@faqs');
 // Admin Panel ------------------------------------------------------------
 Route::get('adm', 'AdminPanelController@index')->middleware('auth', 'role:admin');
 
+    // Products
 	Route::resource('adm/products', 'ProductController');
 	Route::get('adm/products/{id}/edit', 'ProductController@edit')->middleware('auth', 'role:admin');
 	Route::post('adm/products/{id}/update', 'ProductController@update')->middleware('auth', 'role:admin');
@@ -75,8 +76,9 @@ Route::get('adm', 'AdminPanelController@index')->middleware('auth', 'role:admin'
 	// oferts
 	Route::get('/oferts', 'ProductController@showOferts');
 
-	// Ajax
-    Route::post('/adm/product/updateSubCategorySelect/{id}', 'AjaxController@updateSubCategorySelect');
+    // Admin products Filter
+    Route::get('/adm/products/filters/name', 'ProductController@nameFilter');
+
 
 
 

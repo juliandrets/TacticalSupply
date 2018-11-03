@@ -8,6 +8,7 @@ use App\Brand;
 use App\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Intervention\Image\ImageManagerStatic as Image;
 
 
 class ProductController extends Controller
@@ -68,7 +69,13 @@ class ProductController extends Controller
             $image = $request->file('picture');
             $name = time().'.'.$image->getClientOriginalExtension();
             $destinationPath = public_path('/uploads/products/');
+
+            list($width, $height) = getimagesize($image);
+            $tumbImage = Image::make($image->getRealPath());
+            $tumbImage->resize($width / 2, $height / 2);
+
             $image->move($destinationPath, $name);
+            $tumbImage->save(public_path('/uploads/products/tumb/' .$name));
         } else {
             $name = 'sinfoto.jpg';
         }
@@ -95,8 +102,8 @@ class ProductController extends Controller
             'name' => $request->input('name'),
             'price' => $request->input('price'),
             'stock' => $request->input('stock'),
-            'category' => $request->input('category'),
-            'subcategory' => $request->input('subcategory'),
+            'category_id' => $request->input('category'),
+            'subcategory_id' => $request->input('subcategory'),
             'brand' => $request->input('brand'),
             'description' => $request->input('description'),
             'ofert' => $ofert,
@@ -130,11 +137,19 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = Category::all();
-        $brands = Brand::all()->sortBy("name");;
-        return view('admin-panel-edit-product', 
-            ['product' => $product, 'categories' => $categories, 'brands' => $brands]
-        );
+        $this->middleware('role:admin');
+
+        $categories = Category::all()->sortBy("name");
+        $brands = Brand::all()->sortBy("name");
+        $subcategories = Subcategory::all();
+
+
+        return view('admin-panel-edit-product', [
+            'product'        => $product,
+            'categories'     => $categories,
+            'brands'         => $brands,
+            'subcategories'  => $subcategories
+        ]);
     }
 
     /**
@@ -145,13 +160,23 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   
+    {
+        // si ofert no esta activado no seteamos el ofert_date
+        if (!$request->input('ofert')) {
+            $ofert_date = null;
+        } else if ($request->input('ofert')) {
+            if ($request->input('ofert') == "on") {
+                $ofert = 1;
+            } else {
+                $ofert = 0;
+            }
+        }
 
         // si la fecha es nula le asignamos nulo
-        if($request->input('ofert_date')) {
+        if ($request->input('ofert_date')) {
             $ofert_date = $request->input('ofert_date');
         } else {
-            $ofert_date = null;  
+            $ofert_date = null;
         }
 
         // si hay un request de una imagen, la subo y actualizo
@@ -159,21 +184,28 @@ class ProductController extends Controller
             $image = $request->file('picture');
             $name = time().'.'.$image->getClientOriginalExtension();
             $destinationPath = public_path('/uploads/products/');
+
+            list($width, $height) = getimagesize($image);
+            $tumbImage = Image::make($image->getRealPath());
+            $tumbImage->resize($width / 2, $height / 2);
+
             $image->move($destinationPath, $name);
+            $tumbImage->save(public_path('/uploads/products/tumb/' .$name));
 
             Product::find($id)->update([
                 'name' => $request->input('name'),
                 'price' => $request->input('price'),
                 'stock' => $request->input('stock'),
-                'category' => $request->input('category'),
+                'category_id' => $request->input('category'),
+                'subcategory_id' => $request->input('subcategory'),
                 'brand' => $request->input('brand'),
                 'description' => $request->input('description'),
-                'ofert' => $request->input('ofert'),
+                'ofert' => $ofert,
                 'ofert_date' => $ofert_date,
                 'picture' => $name
             ]);
 
-            return redirect('adm');
+            return redirect('adm/products/?event=update');
         }
 
         // si no hay un request de una imagen, actualizo sin tocar el campo de imagen
@@ -181,14 +213,15 @@ class ProductController extends Controller
             'name' => $request->input('name'),
             'price' => $request->input('price'),
             'stock' => $request->input('stock'),
-            'category' => $request->input('category'),
+            'category_id' => $request->input('category'),
+            'subcategory_id' => $request->input('subcategory'),
             'brand' => $request->input('brand'),
             'description' => $request->input('description'),
-            'ofert' => $request->input('ofert'),
+            'ofert' => $ofert,
             'ofert_date' => $ofert_date
         ]);
         
-        return redirect('adm');
+        return redirect('adm/products/?event=update');
 
     }
 
@@ -202,6 +235,17 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $product->delete();
-        return redirect('adm');
+        return redirect('adm/products/?event=delete');
+    }
+
+    // Admin Filters
+    public function nameFilter()
+    {
+        $name = Input::get('name');
+        $data = Product::where('name', 'like', '%'.$name.'%')->paginate(10);
+
+        return view('admin-panel-products',
+            ['products' => $data]
+        );
     }
 }
