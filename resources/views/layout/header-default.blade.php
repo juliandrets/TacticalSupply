@@ -18,6 +18,13 @@
 <div class="blur"></div>
 
 <header>
+
+	@if(Auth::check() && Auth::user()->role_id == 1)
+		<section id="admin-header">
+			<p>Estas logeado como administrador, podes entrar al panel desde <a href="/adm/">aquí.</a></p>
+		</section>
+	@endif
+
 	<section id="top-bar">
 		
 	</section>

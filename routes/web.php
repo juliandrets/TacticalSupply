@@ -23,6 +23,13 @@ Route::get('adm', 'AdminPanelController@index')->middleware('auth', 'role:admin'
 	Route::post('adm/coupons/{id}/update', 'CouponController@update')->middleware('auth', 'role:admin');
 	Route::post('cart/coupon/apply', 'CouponController@applyCoupon');
 
+	// sliders
+	Route::resource('adm/sliders', 'SliderController')->middleware('auth', 'role:admin');
+	Route::get('adm/sliders/{id}/edit', 'SliderController@edit')->middleware('auth', 'role:admin');
+	Route::get('adm/sliders/{id}/delete', 'SliderController@destroy')->middleware('auth', 'role:admin');
+	Route::post('adm/sliders/{id}/update', 'SliderController@update')->middleware('auth', 'role:admin');
+	Route::post('cart/sliders/apply', 'SliderController@applyCoupon');
+
 	// Caterogies
 	Route::resource('adm/categories', 'CategoryController');
 	Route::get('adm/categories/{id}/delete', 'CategoryController@destroy')->middleware('auth', 'role:admin');

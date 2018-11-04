@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Slider;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Brand;
@@ -35,10 +36,14 @@ class HomeController extends Controller
         //category section
         $categories = Category::all();
 
+        //category section
+        $sliders = Slider::all();
+
         return view('index', [
             'lastProducts' => $lastProducts,
             'brands' => $brands,
-            'categories' => $categories
+            'categories' => $categories,
+            'sliders' => $sliders
         ]);
     }
 

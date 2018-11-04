@@ -10,14 +10,26 @@
     <!-- Header -->
     @include('layout.header-default')
     
-    <section id="banner">
-        <section class="banner-content">
-            <div class="content">
-                <h2>Ultimate fall weather shirts</h2>
-                <div class="boton">Ver más</div>
-            </div>
-        </section>
-    </section>
+    <ul id="banner">
+        @foreach($sliders as $slider)
+            <li>
+                <figure><img src="/uploads/sliders/{{ $slider->picture }}" alt=""></figure>
+                <section>
+                    <div class="banner-content">
+                        <div class="content">
+                            <h2>{{ $slider->title }}</h2>
+                            @if($slider->subtitle)
+                                <p>{{ $slider->subtitle }}</p>
+                            @endif
+                            @if($slider->link)
+                                <a href="{{ $slider->link }}" target="_blank"><div class="boton">Ver más</div></a>
+                            @endif
+                        </div>
+                    </div>
+                </section>
+            </li>
+        @endforeach
+    </ul>
 
     <section class="home">
         <section class="products-index">

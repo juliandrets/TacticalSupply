@@ -42,6 +42,13 @@
 						<li><i class="menu-icon fa fa-plus"></i><a href="/adm/coupons/create">Nuevo Cupon</a></li>
 					</ul>
 				</li>
+				<li class="menu-item-has-children dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-flash"></i>Portadas</a>
+					<ul class="sub-menu children dropdown-menu">
+						<li><i class="menu-icon fa fa-eye"></i><a href="/adm/sliders">Ver Portadas</a></li>
+						<li><i class="menu-icon fa fa-plus"></i><a href="/adm/sliders/create">Nueva Portada</a></li>
+					</ul>
+				</li>
 			</ul>
 		</div><!-- /.navbar-collapse -->
 	</nav>

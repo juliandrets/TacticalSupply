@@ -113,6 +113,30 @@ header {
 	background-size: cover;
 	background-position: center;
 
+	#admin-header {
+		height: 40px;
+		background-color: #333;
+		text-align: center;
+
+		p {
+			line-height: 40px;
+			font-weight: 600;
+			font-size: 13px;
+			color: white;
+
+			a {
+				color: white;
+				background-color: $colorPrimary;
+				padding: 2px 4px 2px 4px;
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+				font-size: 13px;
+				border-radius: 4px;
+			}
+		}
+	}
+
 	#top-bar {
 		background-color: #F1592A;
 		height: 20px;
@@ -981,43 +1005,69 @@ footer {
 	height: 80vh;
 	width: 100%;
 
-	display: flex;
-	align-items: center;
+    li{
+      position: relative;
+      overflow: hidden;
 
-	.banner-content {
-		width: 100%;
-		max-width: 1200px;
-		margin: 0 auto;
+      figure {
+        display: flex;
+        align-items: center;
+        img {
+          width: 100%;
+        }
+      }
 
-		.content {
+      section {
+		  position: absolute;
+		  width: 100%;
+		  height: 80vh;
+		  top: 0px;
+		  left: 0px;
+		  display: flex;
+		  align-items: center;
+
+		 .banner-content {
+			width: 100%;
+			max-width: 1200px;
+			margin: 0 auto;
+
+		  .content {
 			h2 {
-				color: white;
-				text-transform: uppercase;
-				font-family: $tercFont;
-				font-size: 100px;
-				font-weight: 900;
-				max-width: 500px;
+			  color: white;
+			  text-transform: uppercase;
+			  font-family: $tercFont;
+			  font-size: 100px;
+			  font-weight: 900;
+			  max-width: 500px;
+			}
+			p {
+			  color: white;
+			  text-transform: uppercase;
+			  font-family: $primaryFont;
+			  font-size: 20px;
+			  font-weight: 900;
+			  max-width: 500px;
 			}
 
 			.boton {
-				background-color: $colorPrimary;
-				padding: 10px 15px 10px 15px;
-				font-size: 18px;
-				font-family: $secondaryFont;
-				color: white;
-				display: inline-block;
-				margin-top: 20px;
+			  background-color: $colorPrimary;
+			  padding: 10px 15px 10px 15px;
+			  font-size: 18px;
+			  font-family: $secondaryFont;
+			  color: white;
+			  display: inline-block;
+			  margin-top: 20px;
 			}
 
 			.boton:hover {
-				background-color: $colorSecond;
+			  background-color: $colorSecond;
 			}
-		}
-	}
+		  }
+        }
+      }
+    }
 
-	img {
-		width: 100%;
-	}
+
 }
 
 // home 
