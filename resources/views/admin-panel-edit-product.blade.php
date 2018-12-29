@@ -46,14 +46,14 @@
                             <div class="card-header">
                                 <strong class="card-title">Nuevo Producto</strong>
                             </div>
-                            <form action="/adm/products/{{$product->id}}/update" method="POST"  enctype="multipart/form-data">
+                            <form action="/adm/products/{{ $model->id }}/update" method="POST"  enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="card-body card-block">
                                     <div class="form-group col-12">
                                         <label class=" form-control-label">Imagen</label>
 
                                         <figure class="img-producto-form">
-                                            <img src="/uploads/products/tumb/{{ $product->picture }}" alt="">
+                                            <img src="/uploads/{{ $route }}/tumb/{{ $model->picture }}" alt="">
                                         </figure>
 
                                         <div class="input-group">
@@ -67,7 +67,7 @@
                                         <label class=" form-control-label">Nombre</label>
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
-                                            <input class="form-control" type="text" name="name" placeholder="Nombre de la categoria *" value="{{ $product->name }}" required>
+                                            <input class="form-control" type="text" name="name" value="{{ $model->name }}" placeholder="Nombre de la categoria *" required>
                                         </div>
                                         <small class="form-text text-muted">Ejemplo: Pantalones Cargo Emerson</small>
                                     </div>
@@ -77,7 +77,7 @@
                                             <div class="input-group-addon"><i class="fa fa-tag"></i></div>
                                             <select class="form-control" name="category" id="category">
                                                 @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}" @if($product->category_id == $category->id) selected @endif>{{ $category->name }}</option>
+                                                    <option value="{{ $category->id }}" @if($model->category_id == $category->id) selected @endif>{{ $category->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -88,8 +88,14 @@
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-tags"></i></div>
                                             <select class="form-control" name="subcategory" id="subcategory">
-                                                @foreach ($subcategories as $subcategory)
-                                                    <option value="{{ $subcategory->id }}" @if($product->subcategory_id == $subcategory->id) selected @endif>{{ $subcategory->name }} - {{ $subcategory->category->name }}</option>
+                                                @foreach ($categories as $category)
+                                                    <optgroup label = "{{ $category->name }}">
+                                                        @foreach ($subcategories as $subcategory)
+                                                            @if($category->id == $subcategory->category_id)
+                                                                <option value="{{ $subcategory->id }}" @if($model->subcategory_id == $subcategory->id) selected @endif>{{ $subcategory->name }}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </optgroup>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -102,7 +108,7 @@
                                             <div class="input-group-addon"><i class="fa fa-shopping-bag"></i></div>
                                             <select class="form-control" name="brand" id="">
                                                 @foreach ($brands as $brand)
-                                                    <option value="{{ $brand->id }}" @if($product->brand == $brand->id) selected @endif>{{ $brand->name }}</option>
+                                                    <option value="{{ $brand->id }}" @if($model->brand == $brand->id) selected @endif>{{ $brand->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -112,7 +118,7 @@
                                         <label class="form-control-label">Precio</label>
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-dollar"></i></div>
-                                            <input class="form-control" type="number" name="price" value="{{ $product->price }}" required>
+                                            <input class="form-control" type="number" name="price" value="{{ $model->price }}" required>
                                         </div>
                                         <small class="form-text text-muted">Precio del producto</small>
                                     </div>
@@ -121,8 +127,8 @@
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-dollar"></i></div>
                                             <select class="form-control" name="currency" id="">
-                                                <option value="ARG" @if($product->currency == "ARG") selected @endif>ARG</option>
-                                                <option value="USD" @if($product->currency == "USD") selected @endif>USD</option>
+                                                <option value="ARG" @if($model->currency == 'ARG') selected @endif>ARG</option>
+                                                <option value="USD" @if($model->currency == 'USD') selected @endif>USD</option>
                                             </select>
                                         </div>
                                         <small class="form-text text-muted">ARG o USD</small>
@@ -131,7 +137,7 @@
                                         <label class=" form-control-label">Stock</label>
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-recycle"></i></div>
-                                            <input class="form-control" type="number" name="stock" value="{{ $product->stock }}" required>
+                                            <input class="form-control" type="number" name="stock" value="{{ $model->stock }}" required>
                                         </div>
                                         <small class="form-text text-muted">Si se queda sin stock el producto deja de estar disponible</small>
                                     </div>
@@ -139,7 +145,7 @@
                                         <label class=" form-control-label">Oferta</label>
                                         <div class="input-group" >
                                             <label class="switch">
-                                                <input type="checkbox" name="ofert" class="ofert" <?php if($product->ofert) { echo "checked"; } ?>>
+                                                <input type="checkbox" name="ofert" class="ofert" @if($model->ofert) checked @endif>
                                                 <span class="slider round"></span>
                                             </label>
                                         </div>
@@ -148,7 +154,7 @@
                                         <label class=" form-control-label">Fecha limite</label>
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-recycle"></i></div>
-                                            <input class="form-control" type="date" name="ofert_date" value="{{ $product->ofert_date }}" required>
+                                            <input class="form-control" type="date" name="ofert_date" value="{{ $model->ofert_date }}" required>
                                         </div>
                                         <small class="form-text text-muted">Fecha limite de la oferta</small>
                                     </div>
@@ -156,9 +162,9 @@
                                     <div class="form-group col-12" id="ofert_date">
                                         <label class=" form-control-label">Descripcion</label>
                                         <div class="input-group">
-                                            <textarea class="form-control" name="description" required style="min-height: 150px">{{ $product->description }}</textarea>
+                                            <textarea class="form-control" name="description" required style="min-height: 150px">{{ $model->description }}</textarea>
                                         </div>
-                                        <small class="form-text text-muted">Fecha limite de la oferta</small>
+                                        <small class="form-text text-muted">Descripcion del producto</small>
                                     </div>
 
                                     <div class="form-group col-12">
@@ -180,12 +186,11 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     <script>
-        $(document).ready(function(){
-            if ($('.ofert').is(':checked')) {
+        $(document).ready(function () {
+            if ($(".ofert").is(':checked')) {
                 $("#ofert_date").fadeIn("slow");
                 $("#ofert_date").css("display", "block");
             }
-
             $(".ofert").click(function () {
                 if ($("#ofert_date").css("display") == "none") {
                     $("#ofert_date").fadeIn("slow");

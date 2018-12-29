@@ -9,8 +9,8 @@ class Category extends Model
     protected $keyType = 'string';
     protected $fillable	 = ['name', 'picture'];
 
-    public function category()
+    public function subcategories()
     {
-        return $this->belongsTo(Subcategory::class);
+        return $this->hasMany(Subcategory::class, 'category_id', 'id');
     }
 }

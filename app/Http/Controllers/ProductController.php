@@ -13,7 +13,9 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class ProductController extends Controller
 {
-    
+    protected $model = Product::class;
+    protected $route = 'products';
+
     public function __construct()
     {
         $this->middleware('role:admin', ['only' => array('create', 'edit', 'destroy')]);
@@ -21,7 +23,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::orderBy('id', 'desc')->paginate(10);
+        $products = $this->model::orderBy('id', 'desc')->paginate(10);
 
         return view('admin-panel-products', ['products' => $products]);
     }
@@ -37,11 +39,6 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $this->middleware('role:admin');
@@ -57,32 +54,15 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        if ($request->hasFile('picture')) {
-            $image = $request->file('picture');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/uploads/products/');
-
-            list($width, $height) = getimagesize($image);
-            $tumbImage = Image::make($image->getRealPath());
-            $tumbImage->resize($width / 2, $height / 2);
-
-            $image->move($destinationPath, $name);
-            $tumbImage->save(public_path('/uploads/products/tumb/' .$name));
-        } else {
-            $name = 'sinfoto.jpg';
-        }
+        // Save pictures
+        $picture = $this->createPicture($request, 'products');
 
         // si ofert no esta activado no seteamos el ofert_date
         if (!$request->input('ofert')) {
             $ofert_date = null;
+            $ofert      = 0;
         } else if ($request->input('ofert')) {
             if ($request->input('ofert') == "on") {
                 $ofert = 1;
@@ -108,7 +88,7 @@ class ProductController extends Controller
             'description' => $request->input('description'),
             'ofert' => $ofert,
             'ofert_date' => $ofert_date,
-            'picture' => $name
+            'picture' => $picture
         ]);
 
         $product->save();
@@ -143,11 +123,11 @@ class ProductController extends Controller
         $brands = Brand::all()->sortBy("name");
         $subcategories = Subcategory::all();
 
-
         return view('admin-panel-edit-product', [
-            'product'        => $product,
+            'model'          => $product,
             'categories'     => $categories,
             'brands'         => $brands,
+            'route'          => $this->route,
             'subcategories'  => $subcategories
         ]);
     }
@@ -164,6 +144,7 @@ class ProductController extends Controller
         // si ofert no esta activado no seteamos el ofert_date
         if (!$request->input('ofert')) {
             $ofert_date = null;
+            $ofert      = 0;
         } else if ($request->input('ofert')) {
             if ($request->input('ofert') == "on") {
                 $ofert = 1;
@@ -179,37 +160,13 @@ class ProductController extends Controller
             $ofert_date = null;
         }
 
-        // si hay un request de una imagen, la subo y actualizo
-        if ($request->hasFile('picture')) {
-            $image = $request->file('picture');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/uploads/products/');
+        // Find model
+        $model = $this->model::find($id);
 
-            list($width, $height) = getimagesize($image);
-            $tumbImage = Image::make($image->getRealPath());
-            $tumbImage->resize($width / 2, $height / 2);
+        // Save pictures
+        $picture = $this->updatePictures($request, $model->picture, 'products');
 
-            $image->move($destinationPath, $name);
-            $tumbImage->save(public_path('/uploads/products/tumb/' .$name));
-
-            Product::find($id)->update([
-                'name' => $request->input('name'),
-                'price' => $request->input('price'),
-                'stock' => $request->input('stock'),
-                'category_id' => $request->input('category'),
-                'subcategory_id' => $request->input('subcategory'),
-                'brand' => $request->input('brand'),
-                'description' => $request->input('description'),
-                'ofert' => $ofert,
-                'ofert_date' => $ofert_date,
-                'picture' => $name
-            ]);
-
-            return redirect('adm/products/?event=update');
-        }
-
-        // si no hay un request de una imagen, actualizo sin tocar el campo de imagen
-        Product::find($id)->update([
+        $model->update([
             'name' => $request->input('name'),
             'price' => $request->input('price'),
             'stock' => $request->input('stock'),
@@ -218,11 +175,11 @@ class ProductController extends Controller
             'brand' => $request->input('brand'),
             'description' => $request->input('description'),
             'ofert' => $ofert,
-            'ofert_date' => $ofert_date
+            'ofert_date' => $ofert_date,
+            'picture' => $picture
         ]);
-        
-        return redirect('adm/products/?event=update');
 
+        return redirect('adm/products/?event=update');
     }
 
     /**

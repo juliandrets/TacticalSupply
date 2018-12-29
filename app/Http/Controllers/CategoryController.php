@@ -10,6 +10,8 @@ use Illuminate\Http\RedirectResponse;
 
 class CategoryController extends Controller
 {
+    protected $model = Category::class;
+
     public function __construct()
     {
         $this->middleware('role:admin', ['only' => array('create', 'edit', 'destroy')]);
@@ -25,36 +27,19 @@ class CategoryController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('admin-panel-create-category');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        if ($request->hasFile('picture')) {
-            $image = $request->file('picture');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/uploads/categories/');
-            $image->move($destinationPath, $name);
-        } else {
-            $name = 'sinfoto.jpg';
-        }
+        // Save pictures
+        $picture = $this->createPicture($request, 'categories');
 
         $category = new Category([
             'name' => $request->input('name'),
-            'picture' => $name
+            'picture' => $picture
         ]);
         $category->save();
 
@@ -62,12 +47,6 @@ class CategoryController extends Controller
         return redirect('adm/categories?event=create');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
     public function show($name)
     {
         $categories = Category::all();
@@ -85,6 +64,7 @@ class CategoryController extends Controller
             'latestProducts' => $latestProducts
         ]);
     }
+
     public function showWithFilterPrice(Request $request, $name)
     {
         $min = $request->input('min');
@@ -108,45 +88,23 @@ class CategoryController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $category = Category::find($id);
         return view('admin-panel-edit-category', ['category' => $category]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        // si hay un request de una imagen, la subo y actualizo
-        if ($request->hasFile('picture')) {
-            $image = $request->file('picture');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/uploads/categories/');
-            $image->move($destinationPath, $name);
+        // Find model
+        $model = $this->model::find($id);
 
-            Category::find($id)->update([
-                'name' => $request->input('name'),
-                'picture' => $name
-            ]);
+        // Save pictures
+        $picture = $this->updatePictures($request, $model->picture, 'categories');
 
-            return redirect('adm/categories');
-        }
-
-        // si no hay un request de una imagen, actualizo sin tocar el campo de imagen
-        Category::find($id)->update([
-            'name' => $request->input('name')
+        $model->update([
+            'name'    => $request->input('name'),
+            'picture' => $picture,
         ]);
         
         return redirect('adm/categories?event=edit');

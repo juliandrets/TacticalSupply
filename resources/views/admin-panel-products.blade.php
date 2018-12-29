@@ -94,7 +94,7 @@
                                         <tr>
                                             <td><figure class="img-table"><img src="/uploads/products/{{ $product->picture }}" alt=""></figure></td>
                                             <td>{{ $product->name }}</td>
-                                            <td>${{ $product->price }}</td>
+                                            <td>${{ $product->price }} {{ $product->currency }}</td>
                                             <td>{{ $product->category->name }}</td>
                                             <td>{{ $product->subcategory->name }}</td>
                                             <td>@if($product->ofert) <span class="inOfert" data-tooltip="tooltip" data-placement="bottom" title="Hasta: {{ $product->ofert_date }}"><i class="fa fa-check" aria-hidden="true"></i> EN OFERTA</span> @else - @endif</td>

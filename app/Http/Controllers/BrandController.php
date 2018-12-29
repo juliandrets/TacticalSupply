@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
+    protected $model = Brand::class;
+
     public function __construct()
     {
         $this->middleware('role:admin', ['only' => array('create', 'edit', 'destroy')]);
@@ -15,18 +17,15 @@ class BrandController extends Controller
 
     public function index()
     {
-        $brands = Brand::all()->sortBy("name");
+        $brands = $this->model::orderBy('id', 'desc')->paginate(20);
         return view('admin-panel-brands', ['brands' => $brands]);
     }
 
     public function brandSection($name) {
 
-        $brands = Brand::orderBy('name', 'asc')->get();
-
-        $brandTitle = Brand::where('name', $name)->first();
-
-        $products = Product::where('brand', $name)->orderBy('id', 'desc')->paginate(20);
-
+        $brands     = $this->model::orderBy('name', 'asc')->get();
+        $brandTitle = $this->model::where('name', $name)->first();
+        $products   = $this->model::where('brand', $name)->orderBy('id', 'desc')->paginate(20);
 
         return view('brands', [
             'brandTitle' => $brandTitle,
@@ -35,104 +34,55 @@ class BrandController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('admin-panel-create-brand');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        if ($request->hasFile('picture')) {
-            $image = $request->file('picture');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/uploads/brands/');
-            $image->move($destinationPath, $name);
-        } else {
-            $name = 'sinfoto.jpg';
-        }
+        // save picture
+        $picture = $this->createPicture($request, 'brands');
 
-        $brand = new Brand([
+        // save brand
+        $model = new $this->model([
             'name' => $request->input('name'),
-            'picture' => $name
+            'picture' => $picture
         ]);
+        $model->save();
 
-        $brand->save();
-
+        // return
         return redirect('adm/brands');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Brand  $brand
-     * @return \Illuminate\Http\Response
-     */
     public function show(Brand $brand)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Brand  $brand
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $brand = Brand::find($id);
-        return view('admin-panel-edit-brand', ['brand' => $brand]);
+        $model = $this->model::find($id);
+        return view('admin-panel-edit-brand', ['model' => $model]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Brand  $brand
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        // si hay un request de una imagen, la subo y actualizo
-        if ($request->hasFile('picture')) {
-            $image = $request->file('picture');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/uploads/brands/');
-            $image->move($destinationPath, $name);
+        // find model
+        $model = $this->model::find($id);
 
-            Brand::find($id)->update([
-                'name' => $request->input('name'),
-                'picture' => $name
-            ]);
-
-            return redirect('adm/brands');
-        }
+        // save picture
+        $picture = $this->updatePictures($request, $model->picture, 'brands');
 
         // si no hay un request de una imagen, actualizo sin tocar el campo de imagen
-        Brand::find($id)->update([
-            'name' => $request->input('name')
+        $model->update([
+            'name'    => $request->input('name'),
+            'picture' => $picture,
         ]);
         
         return redirect('adm/brands');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Brand  $brand
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $brand = Brand::find($id);

@@ -83,8 +83,14 @@
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-tags"></i></div>
                                             <select class="form-control" name="subcategory" id="subcategory">
-                                                @foreach ($subcategories as $subcategory)
-                                                    <option value="{{ $subcategory->id }}">{{ $subcategory->name }} - {{ $subcategory->category->name }}</option>
+                                                @foreach ($categories as $category)
+                                                    <optgroup label = "{{ $category->name }}">
+                                                        @foreach ($subcategories as $subcategory)
+                                                            @if($category->id == $subcategory->category_id)
+                                                                <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </optgroup>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -143,7 +149,7 @@
                                         <label class=" form-control-label">Fecha limite</label>
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-recycle"></i></div>
-                                            <input class="form-control" type="date" name="ofert_date" value="1" required>
+                                            <input class="form-control" type="date" name="ofert_date" value="1">
                                         </div>
                                         <small class="form-text text-muted">Fecha limite de la oferta</small>
                                     </div>
@@ -190,13 +196,5 @@
     </script>
 
     @include('layout/admin/validaciones')
-
-    <script src="{{ asset('admin/js/popper.min.js') }}"></script>
-    <script src="{{ asset('admin/js/plugins.js') }}"></script>
-    <script src="{{ asset('admin/js/main.js') }}"></script>
-
-
-
-
 
 @endsection
