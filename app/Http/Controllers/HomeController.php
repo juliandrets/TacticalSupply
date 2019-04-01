@@ -27,9 +27,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // index solapas
-        $lastProducts = Product::limit(8)->orderBy('id', 'desc')->get();
-
         // brands section
         $brands = Brand::all();
 
@@ -40,7 +37,6 @@ class HomeController extends Controller
         $sliders = Slider::all();
 
         return view('index', [
-            'lastProducts' => $lastProducts,
             'brands' => $brands,
             'categories' => $categories,
             'sliders' => $sliders

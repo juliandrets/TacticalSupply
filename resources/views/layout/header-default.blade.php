@@ -73,12 +73,23 @@
 		<section id="bottom-bar">
 			<!-- Boton de categorias -->
 			<div class="boton-categorias">
-				<i class="fa fa-shopping-bag" aria-hidden="true"></i> <span>SHOP</span>
+				<i class="fa fa-shopping-bag" aria-hidden="true"></i> <span>PRODUCTOS</span>
 
 				<ul class="categorias-ul">
-					@foreach(\App\Category::all() as $category)
-						<a href="/category/{{$category->name}}"><li>{{$category->name}}</li></a>
-					@endforeach
+					<section class="align">
+						@foreach(\App\Category::all() as $category)
+							<li class="category-li">
+								<a href="/category/{{$category->name}}" class="title-a">{{$category->name}}</a>
+								@if (\App\Subcategory::where('category_id', $category->id)->get())
+									<ul class="subcategories-ul">
+										@foreach(\App\Subcategory::where('category_id', $category->id)->get() as $subcategory)
+											<li><a href="/productos/{{ $category->name }}/{{$subcategory->name}}" class="subcategory-a">{{ $subcategory->name }}</a></li>
+										@endforeach
+									</ul>
+								@endif
+							</li>
+						@endforeach
+					</section>
 				</ul>
 			</div>
 			<div class="boton-categorias-responsive">

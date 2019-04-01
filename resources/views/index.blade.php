@@ -3,7 +3,7 @@
 @extends('layout.default')
 
 <!-- Nombre del titulo de la pagina -->
-<?php $title = 'Smart - Search, click, get it!'; ?>
+<?php $title = 'Tactical Supply'; ?>
 
 @section('content')
 
@@ -33,39 +33,46 @@
 
     <section class="home">
         <section class="products-index">
-            <section class="products">
-                <ul class="products-ul">
-                    @foreach($lastProducts as $product)
-                    <?php
-                        $ofertProduct = ($product->price * $product->ofert) / 100;
-                        $priceProduct = $product->price - $ofertProduct;
-                    ?>
-                    <li>
-                        <a href="/products/{{$product->id}}"><figure>
-                            <img src="/uploads/products/{{$product->picture}}" alt="">
-                            @if($product->ofert)<div class="ofert-box">-${{$ofertProduct}}</div>@endif
-                        </figure></a>
-                        <p>
-                            {{$product->name}}
-                        </p>
-                        <div class="price">
-                            @if($product->ofert)
-                                <span class="ofertProductTextColor" style='color:green'>${{$priceProduct}}</span>
-                                <span class="ofertProductSquare">OFERTA!</span>
-                            @else
-                                ${{$product->price}}
-                            @endif
-                        </div>
+                @foreach($categories as $category)
+                    <section class="products">
+                        <section class="align">
+                            <div class="title">
+                                <h2 class="i{{$category->id}}">{{ $category->name }}</h2>
+                                <div></div>
+                            </div>
+                            <ul class="products-ul">
+                                @foreach(\App\Product::where('category_id', $category->id)->limit(4)->get() as $product)
+                                <?php
+                                    $ofertProduct = ($product->price * $product->ofert) / 100;
+                                    $priceProduct = $product->price - $ofertProduct;
+                                ?>
+                                <li>
+                                    <a href="/products/{{$product->id}}"><figure>
+                                        <img src="/uploads/products/{{$product->picture}}" alt="">
+                                        @if($product->ofert)<div class="ofert-box">-${{$ofertProduct}}</div>@endif
+                                    </figure></a>
+                                    <p>
+                                        {{$product->name}}
+                                    </p>
+                                    <div class="price">
+                                        @if($product->ofert)
+                                            <span class="ofertProductTextColor" style='color:green'>${{$priceProduct}}</span>
+                                            <span class="ofertProductSquare">OFERTA!</span>
+                                        @else
+                                            ${{$product->price}} {{ $product->currency }}
+                                        @endif
+                                    </div>
 
-                        <ul class="buttons">
-                            <li>Ver más</li>
-                            <li>Comprar</li>
-                        </ul>
-                    </li>
-                    @endforeach
-                </ul>
-                </div>
-            </section>
+                                    <ul class="buttons">
+                                        <li>Ver más</li>
+                                        <li>Comprar</li>
+                                    </ul>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </section>
+                    </section>
+                @endforeach
         </section>
 
         <section id="brands-section">

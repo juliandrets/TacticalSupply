@@ -154,7 +154,7 @@
                                         <label class=" form-control-label">Fecha limite</label>
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-recycle"></i></div>
-                                            <input class="form-control" type="date" name="ofert_date" value="{{ $model->ofert_date }}" required>
+                                            <input class="form-control" type="date" id="ofert_date_input" name="ofert_date" value="{{ $model->ofert_date }}">
                                         </div>
                                         <small class="form-text text-muted">Fecha limite de la oferta</small>
                                     </div>
@@ -190,14 +190,17 @@
             if ($(".ofert").is(':checked')) {
                 $("#ofert_date").fadeIn("slow");
                 $("#ofert_date").css("display", "block");
+                $("#ofert_date_input").attr('required', 'required');
             }
             $(".ofert").click(function () {
                 if ($("#ofert_date").css("display") == "none") {
                     $("#ofert_date").fadeIn("slow");
                     $("#ofert_date").css("display", "block");
+                    $("#ofert_date_input").attr('required', 'required');
                 } else {
                     $("#ofert_date").fadeOut("slow", function() {
                         $("#ofert_date").css("display", "none");
+                        $("#ofert_date_input").removeAttr('required');
                     });
                 }
             });

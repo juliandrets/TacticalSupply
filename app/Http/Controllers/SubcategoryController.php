@@ -49,15 +49,26 @@ class SubcategoryController extends Controller
         return redirect('adm/categories?event=create-sub');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show($name)
+    public function show($category, $subcategory)
     {
+        $categories = Category::all();
 
+        $categoryTitle = Category::where('name', $category)->first();
+        $subcategory = Subcategory::where('name', $subcategory)->first();
+        $products = Product::where('category_id', $categoryTitle->id)
+            ->where('subcategory_id', $subcategory->id)
+            ->orderBy('id', 'desc')
+            ->paginate(20);
+
+        $latestProducts = Product::orderBy('id', 'desc')->take(2)->get();
+
+        return view('subcategory', [
+            'categoryTitle' => $categoryTitle,
+            'categories' => $categories,
+            'products' => $products,
+            'subcategory' => $subcategory,
+            'latestProducts' => $latestProducts
+        ]);
     }
 
     /**

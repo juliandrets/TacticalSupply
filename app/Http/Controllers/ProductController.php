@@ -81,6 +81,7 @@ class ProductController extends Controller
         $product = new Product([
             'name' => $request->input('name'),
             'price' => $request->input('price'),
+            'currency' => $request->input('currency'),
             'stock' => $request->input('stock'),
             'category_id' => $request->input('category'),
             'subcategory_id' => $request->input('subcategory'),
@@ -174,6 +175,7 @@ class ProductController extends Controller
             'subcategory_id' => $request->input('subcategory'),
             'brand' => $request->input('brand'),
             'description' => $request->input('description'),
+            'currency' => $request->input('currency'),
             'ofert' => $ofert,
             'ofert_date' => $ofert_date,
             'picture' => $picture

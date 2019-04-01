@@ -52,8 +52,9 @@ class CategoryController extends Controller
         $categories = Category::all();
 
         $categoryTitle = Category::where('name', $name)->first();
+        $categoryTitle = Category::where('name', $name)->first();
 
-        $products = Product::where('category', $name)->orderBy('id', 'desc')->paginate(20);
+        $products = Product::where('category_id', $categoryTitle->id)->orderBy('id', 'desc')->paginate(20);
 
         $latestProducts = Product::orderBy('id', 'desc')->take(2)->get();
 

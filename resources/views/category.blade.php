@@ -85,31 +85,46 @@
 
             <h2 class="title-category">{{$categoryTitle->name}} <div class="b-filtros"><i class="fa fa-filter" aria-hidden="true"></i></div></h2>
 
-            <ul class="products">
-                @foreach($products as $product)
-                    <?php  
-                        $ofertProduct = ($product->price * $product->ofert) / 100;
-                        $priceProduct = $product->price - $ofertProduct; 
-                    ?>
-                    <li>
-                        <a href="/products/{{$product->id}}"><figure>
-                            <img src="/uploads/products/{{$product->picture}}" alt="">
-                            @if($product->ofert)<div class="ofert-box">-${{$ofertProduct}}</div>@endif
-                        </figure></a>
-                        <div class="price">
-                            @if($product->ofert)
-                                <span class="ofertProductTextColor" style='color:green'>${{$priceProduct}}</span>
-                                <span class="ofertProductSquare">OFERTA!</span>
-                            @else
-                                ${{$product->price}}
-                            @endif
+            <section class="products">
+                <section class="products">
+                    <section class="align">
+                        <div class="title">
+                            <h2 class="i{{$subcategory->id}}">{{ $subcategory->name }}</h2>
+                            <div></div>
                         </div>
-                        <p> 
-                            {{$product->name}}
-                        </p>
-                    </li>
-                @endforeach
-            </ul>
+                        <ul class="products-ul">
+                            @foreach($products as $product)
+                                <?php
+                                $ofertProduct = ($product->price * $product->ofert) / 100;
+                                $priceProduct = $product->price - $ofertProduct;
+                                ?>
+                                <li>
+                                    <a href="/products/{{$product->id}}"><figure>
+                                            <img src="/uploads/products/{{$product->picture}}" alt="">
+                                            @if($product->ofert)<div class="ofert-box">-${{$ofertProduct}}</div>@endif
+                                        </figure></a>
+                                    <p>
+                                        {{$product->name}}
+                                    </p>
+                                    <div class="price">
+                                        @if($product->ofert)
+                                            <span class="ofertProductTextColor" style='color:green'>${{$priceProduct}}</span>
+                                            <span class="ofertProductSquare">OFERTA!</span>
+                                        @else
+                                            ${{$product->price}} {{ $product->currency }}
+                                        @endif
+                                    </div>
+
+                                    <ul class="buttons">
+                                        <li>Ver más</li>
+                                        <li>Comprar</li>
+                                    </ul>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </section>
+                </section>
+            </section>
             {{ $products->links() }}
         </section>
     </section>

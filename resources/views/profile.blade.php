@@ -2,7 +2,7 @@
 @extends('layout.default')
 
 <!-- Nombre del titulo de la pagina -->
-<?php $title = 'Perfil - Smart'; ?>
+<?php $title = 'Perfil - Tactical Supply'; ?>
 
 @section('content')
 

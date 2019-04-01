@@ -47,7 +47,7 @@
                                 <strong class="card-title">Nueva Categoria</strong>
                             </div>
                             <form action="/adm/categories" method="POST"  enctype="multipart/form-data">
-                                {{ csrf_field() }}
+                                @csrf
                                 <div class="card-body card-block">
                                     <div class="form-group">
                                         <label class=" form-control-label">Imagen</label>
