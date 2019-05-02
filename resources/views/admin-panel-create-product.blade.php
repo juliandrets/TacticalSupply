@@ -157,7 +157,7 @@
                                     <div class="form-group col-12" id="ofert_date">
                                         <label class=" form-control-label">Descripcion</label>
                                         <div class="input-group">
-                                            <textarea class="form-control" name="description" required style="min-height: 150px"></textarea>
+                                            <textarea class="form-control" name="description" style="min-height: 150px"></textarea>
                                         </div>
                                         <small class="form-text text-muted">Fecha limite de la oferta</small>
                                     </div>
